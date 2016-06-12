@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,23 +9,29 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type status struct {
-	api      string
-	space    string
-	logo     string
-	url      string
-	location struct {
-		address string
-		lat     float32
-		lon     float32
-	}
-	contact struct {
-		twitter string
-	}
-	issue_report_channels []string
-	state                 struct {
-		open bool
-	}
+type Status struct {
+	Api                   string `json:"api"`
+	Space                 string `json:"space"`
+	Logo                  string `json:"logo"`
+	Url                   string `json:"url"`
+	Location              `json:"location"`
+	Contact               `json:"contact"`
+	Issue_report_channels []string `json:"issue_report_channels"`
+	State                 `json:"state"`
+}
+
+type Location struct {
+	Address string  `json:"address"`
+	Lat     float32 `json:"lat"`
+	Lon     float32 `json:"lon"`
+}
+
+type Contact struct {
+	Twitter string `json:"twitter"`
+}
+
+type State struct {
+	Open bool `json:"open"`
 }
 
 func main() {
@@ -36,6 +43,23 @@ func main() {
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-    //json.NewEncoder(w).Encode(s)
-	fmt.Fprintln(w, "Welcome!")
+	s := Status{
+		Api:   "0.13",
+		Space: "Chaos Computer Club Zürich",
+		Logo:  "http://blafasel/foo.png",
+		Url:   "http://ccczh.ch",
+		Location: Location{
+			Address: "Röschtibachstr",
+			Lat:     1.33,
+			Lon:     4.77,
+		},
+		Contact: Contact{
+			Twitter: "@ccczh",
+		},
+		Issue_report_channels: []string{"Twitter", "E-Mail"},
+		State: State{
+			Open: true,
+		},
+	}
+	json.NewEncoder(w).Encode(s)
 }
