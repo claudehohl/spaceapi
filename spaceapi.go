@@ -27,7 +27,11 @@ type Location struct {
 }
 
 type Contact struct {
+	Phone   string `json:"phone"`
+	Irc     string `json:"irc"`
 	Twitter string `json:"twitter"`
+	Email   string `json:"email"`
+	Jabber  string `json:"jabber"`
 }
 
 type State struct {
@@ -46,14 +50,18 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	s := Status{
 		Api:   "0.13",
 		Space: "Chaos Computer Club Zürich",
-		Logo:  "http://blafasel/foo.png",
+		Logo:  "https://stopbuepf.ch/wp-content/uploads/ccczh_logo.png",
 		Url:   "http://ccczh.ch",
 		Location: Location{
-			Address: "Röschtibachstr",
-			Lat:     1.33,
-			Lon:     4.77,
+			Address: "Röschtibachstrasse 26",
+			Lat:     47.39306,
+			Lon:     8.524826,
 		},
 		Contact: Contact{
+			Phone:   "+41 79 191 23 70",
+			Email:   "presse@ccczh.ch",
+			Irc:     "irc://irc.chaostreff.ch/#ccczh",
+			Jabber:  "xmpp://ccczh@conference.ccczh.ch",
 			Twitter: "@ccczh",
 		},
 		Issue_report_channels: []string{"Twitter", "E-Mail"},
