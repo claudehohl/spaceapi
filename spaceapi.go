@@ -6,8 +6,6 @@ import (
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/gorilla/mux"
 )
 
 type Status struct {
@@ -40,13 +38,12 @@ type State struct {
 }
 
 func main() {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
 	fmt.Println("Webserver running on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	http.HandleFunc("/", ApiEndpoint)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
+func ApiEndpoint(w http.ResponseWriter, r *http.Request) {
 	s := Status{
 		Api:   "0.13",
 		Space: "Chaos Computer Club Zürich",
