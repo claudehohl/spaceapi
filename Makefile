@@ -1,6 +1,8 @@
 all:
-	clear
-	go install github.com/claudehohl/spaceapi
-	spaceapi
+	go build spaceapi.go
+	./spaceapi
+
+raspi:
+	GOARCH=arm GOARM=7 go build spaceapi.go
 
 .PHONY: all
