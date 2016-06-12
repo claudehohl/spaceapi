@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -41,7 +42,6 @@ type State struct {
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
-
 	fmt.Println("Webserver running on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -66,8 +66,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		},
 		Issue_report_channels: []string{"Twitter", "E-Mail"},
 		State: State{
-			Open: true,
+			Open: checkDoor(),
 		},
 	}
 	json.NewEncoder(w).Encode(s)
+}
+
+func checkDoor() bool {
+	t := time.Now()
+	hour, _, _ := t.Clock()
+	weekday := t.Weekday().String()
+	return weekday == "Wednesday" && (hour >= 19 && hour <= 23)
 }
