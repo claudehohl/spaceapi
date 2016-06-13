@@ -8,24 +8,26 @@ import (
 	"time"
 )
 
-type Status struct {
-	Api                   string `json:"api"`
-	Space                 string `json:"space"`
-	Logo                  string `json:"logo"`
-	Url                   string `json:"url"`
-	Location              `json:"location"`
-	Contact               `json:"contact"`
-	Issue_report_channels []string `json:"issue_report_channels"`
-	State                 `json:"state"`
+// all types unexported, but fields must be exported,
+// otherwise not visible in json
+type status struct {
+	API                 string `json:"api"`
+	Space               string `json:"space"`
+	Logo                string `json:"logo"`
+	URL                 string `json:"url"`
+	location            `json:"location"`
+	contact             `json:"contact"`
+	IssueReportChannels []string `json:"issue_report_channels"`
+	state               `json:"state"`
 }
 
-type Location struct {
+type location struct {
 	Address string  `json:"address"`
 	Lat     float32 `json:"lat"`
 	Lon     float32 `json:"lon"`
 }
 
-type Contact struct {
+type contact struct {
 	Phone   string `json:"phone"`
 	Irc     string `json:"irc"`
 	Twitter string `json:"twitter"`
@@ -33,36 +35,36 @@ type Contact struct {
 	Jabber  string `json:"jabber"`
 }
 
-type State struct {
+type state struct {
 	Open bool `json:"open"`
 }
 
 func main() {
 	fmt.Println("Webserver running on port 8080")
-	http.HandleFunc("/", ApiEndpoint)
+	http.HandleFunc("/", apiEndpoint)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func ApiEndpoint(w http.ResponseWriter, r *http.Request) {
-	s := Status{
-		Api:   "0.13",
+func apiEndpoint(w http.ResponseWriter, r *http.Request) {
+	s := status{
+		API:   "0.13",
 		Space: "Chaos Computer Club Zürich",
 		Logo:  "https://stopbuepf.ch/wp-content/uploads/ccczh_logo.png",
-		Url:   "http://ccczh.ch",
-		Location: Location{
+		URL:   "http://ccczh.ch",
+		location: location{
 			Address: "Röschtibachstrasse 26",
 			Lat:     47.39306,
 			Lon:     8.524826,
 		},
-		Contact: Contact{
+		contact: contact{
 			Phone:   "+41 79 191 23 70",
 			Email:   "presse@ccczh.ch",
 			Irc:     "irc://irc.chaostreff.ch/#ccczh",
 			Jabber:  "xmpp://ccczh@conference.ccczh.ch",
 			Twitter: "@ccczh",
 		},
-		Issue_report_channels: []string{"Twitter", "E-Mail"},
-		State: State{
+		IssueReportChannels: []string{"Twitter", "E-Mail"},
+		state: state{
 			Open: checkDoor(),
 		},
 	}
